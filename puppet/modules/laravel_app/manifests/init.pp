@@ -14,16 +14,9 @@ class laravel_app
 		require => Package['apache2']
 	}
 
-	exec { 'setup laravel installer':
-		command => "/bin/sh -c 'wget http://laravel.com/laravel.phar && chmod +x laravel.phar && mv laravel.phar /usr/local/bin/laravel'",
-		creates => [ "/usr/local/bin/laravel"],
-		timeout => 900
-	}
-
-
 	exec { 'create laravel project':
-		command => "/bin/bash -c 'cd /var/www/ && shopt -s dotglob nullglob; laravel new temp && mv temp/* . && rm -rf temp'",
-		require => [Exec['setup laravel installer'], Package['php5'], Package['git-core']], #Exec['clean www directory']
+		command => "/bin/bash -c 'cd /var/www/ && shopt -s dotglob nullglob; composer create-project laravel/laravel . --prefer-dist'",
+		require => [Exec['global composer'], Package['php5'], Package['git-core'], Exec['clean www directory']],
 		creates => "/var/www/composer.json",
 		timeout => 1800,
 		logoutput => true
@@ -44,7 +37,6 @@ class laravel_app
         creates => "/var/www/vendor/autoload.php",
         timeout => 900,
 	}
-
 
 	file { '/var/www/app/storage':
 		mode => 0777
