@@ -24,7 +24,7 @@ class laravel_app
 
 	exec { 'update packages':
         command => "/bin/sh -c 'cd /var/www/ && composer --verbose --prefer-dist update'",
-        require => [Package['git-core'], Package['php5'], Exec['global composer']],
+        require => [Package['git-core'], Exec['global composer'], Exec['create laravel project']],
         onlyif => [ "test -f /var/www/composer.json", "test -d /var/www/vendor" ],
         timeout => 900,
         logoutput => true
@@ -32,7 +32,7 @@ class laravel_app
 
 	exec { 'install packages':
         command => "/bin/sh -c 'cd /var/www/ && composer install'",
-        require => Package['git-core'],
+        require => [Package['git-core'], Exec['global composer']],
         onlyif => [ "test -f /var/www/composer.json" ],
         creates => "/var/www/vendor/autoload.php",
         timeout => 900,
