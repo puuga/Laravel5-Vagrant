@@ -72,6 +72,11 @@ Vagrant is [very well documented](http://vagrantup.com/v1/docs/index.html) but h
 * `vagrant halt` attempts a graceful shutdown of the machine and will need to be brought back with `vagrant up`
 * `vagrant ssh` gives you shell access to the virtual machine
 
+### AWS deployment
+
+Easy deployment to the cloud (AWS), via `vagrant up --provider=aws`. The Vagrantfile contains configuration options for setting your keypair name, the the location of your key and the name of your server.
+
+
 ----
 ##### Virtual Machine Specifications #####
 
